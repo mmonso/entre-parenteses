@@ -6,23 +6,45 @@
   "categories": [
     {
       "name": "Relação consigo",
-      "topics": ["Solidão", "Autocrítica", "Corpo", "Memória"]
+      "topics": [
+        "Solidão",
+        "Autocrítica",
+        "Corpo",
+        "Memória"
+      ]
     },
     {
       "name": "Relação com o outro",
-      "topics": ["Ciúme", "Amizade", "Rupturas", "Cuidado"]
+      "topics": [
+        "Ciúme",
+        "Amizade",
+        "Rupturas",
+        "Cuidado"
+      ]
     },
     {
       "name": "Relação com o mundo",
-      "topics": ["Trabalho", "Pertencimento", "Notícias"]
+      "topics": [
+        "Trabalho",
+        "Pertencimento",
+        "Notícias"
+      ]
     },
     {
       "name": "Relação com o tempo",
-      "topics": ["Luto", "Espera", "Envelhecer"]
+      "topics": [
+        "Luto",
+        "Espera",
+        "Envelhecer"
+      ]
     },
     {
       "name": "Relação com algo maior",
-      "topics": ["Espiritualidade", "Silêncio", "Sentido"]
+      "topics": [
+        "Espiritualidade",
+        "Silêncio",
+        "Sentido"
+      ]
     }
   ],
   "posts": [
@@ -53,6 +75,13 @@
       "topic": "Luto",
       "date": "2026-04-16",
       "body": "Aprendemos a pensar o luto como um percurso: fases numeradas, uma superação ao final, um prazo razoável depois do qual seria hora de seguir em frente. É uma narrativa organizada, e talvez seja por isso que ela nos agrade. O problema é que ela não descreve o que as pessoas efetivamente vivem.\n\nQuem perdeu alguém sabe que o luto não avança em linha. Ele volta. Volta num cheiro, numa data qualquer, no gesto de pegar o telefone antes de lembrar. Alguém pode passar meses relativamente bem e ser derrubado por uma tarde de terça-feira sem motivo aparente. Isso não é recaída. É como o luto funciona.\n\n## Não se trata de esquecer\n\nA ideia de que curar é desapegar produz uma culpa silenciosa: se ainda dói, então eu falhei. Mas o vínculo não desaparece com a morte — ele muda de forma. Continuamos em relação com quem partiu, só que numa gramática diferente. Falamos com a pessoa, discordamos dela, imaginamos o que diria. Isso não é negação; é a continuidade de um laço que foi real.\n\nO que costuma mudar, com o tempo, não é a intensidade da falta, e sim o espaço que ela ocupa. No começo, a perda é tudo. Depois, a vida vai crescendo em torno dela. A dor não encolhe tanto quanto o resto se expande.\n\n## O luto que ninguém reconhece\n\nHá perdas que não recebem ritual: o fim de uma amizade longa, uma gravidez que não seguiu, a saúde de antes, o país que não existe mais, a pessoa que se era. Sem reconhecimento social, o enlutado não sabe se tem direito à dor — e frequentemente conclui que não tem. Essa dúvida acrescenta solidão ao sofrimento.\n\nNomear ajuda. Dizer que aquilo foi uma perda, e não apenas uma mudança, costuma ser o primeiro alívio de alguém que passou meses se acusando de exagero.\n\n## O tempo não cura sozinho\n\nA frase é bem-intencionada e imprecisa. O tempo, isolado, não faz muita coisa. O que acontece dentro do tempo é que faz: falar, chorar, lembrar, retomar rotinas, tolerar dias ruins, aceitar ajuda, refazer sentidos. É trabalho, ainda que não pareça trabalho — e é um trabalho que não se pode apressar sem consequência.\n\nTalvez a pergunta mais honesta diante de alguém enlutado não seja quando isso vai passar, mas o que ainda precisa ser dito.\n\nSe a falta é a forma que o vínculo encontrou de continuar, o que você ainda gostaria de contar a quem já foi?"
+    },
+    {
+      "title": "A autenticidade que virou performance",
+      "category": "Relação consigo",
+      "topic": "Autenticidade",
+      "date": "2026-07-29",
+      "body": "Nas redes sociais, \"seja autêntico\" virou quase um mandamento — e, ironicamente, um mandamento que se cumpre performando. Existe todo um estilo de postar hoje que sinaliza autenticidade: a foto sem filtro (cuidadosamente escolhida), o desabafo vulnerável (editado até soar espontâneo), o \"hoje não to bem\" compartilhado de um jeito esteticamente cuidado. A autenticidade, nesse contexto, virou mais um estilo a dominar do que uma experiência real.\n\nIsso não significa que toda expressão pública de vulnerabilidade seja falsa — muita gente realmente compartilha o que sente, com sinceridade genuína. O problema é mais sutil: quando autenticidade se torna um valor socialmente premiado, ela corre o risco de virar, ela mesma, uma nova forma de performance, só que mais difícil de identificar, porque usa a linguagem exata do que deveria ser seu oposto.\n\nA pessoa começa a monitorar a própria vulnerabilidade — não sentindo e depois decidindo compartilhar, mas já sentindo em função de como aquilo vai parecer quando compartilhado. Isso inverte a ordem natural da experiência: em vez de a autenticidade nascer de dentro pra fora, ela passa a ser moldada de fora pra dentro, pelo que rende like, pelo que soa genuíno o suficiente pro público.\n\nTalvez a pergunta útil não seja \"estou sendo autêntico?\", que já convida a uma autoavaliação performática. Seja: eu sentiria e faria isso do mesmo jeito se ninguém estivesse vendo?"
     }
   ]
 }
