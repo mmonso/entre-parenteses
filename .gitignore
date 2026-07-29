@@ -1,0 +1,10 @@
+# Thumbnail gerado pelo editor
+.thumbnail
+
+# Vercel
+.vercel
+
+# Sistema
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #faf7f1; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; transition: background-color .6s ease; }
+  ::selection { background: rgba(162,96,62,0.16); }
+  a { color: inherit; text-decoration: none; }
+  a:hover { color: #a2603e; }
+  a:focus-visible, input:focus-visible { outline: 1px solid currentColor; outline-offset: 5px; }
+  input { font: inherit; color: inherit; background: none; border: 0; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .5s; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+  @media print {
+    body { background: #fff; }
+    [data-chrome] { display: none !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+    p { orphans: 3; widows: 3; }
+    @page { margin: 22mm 20mm; }
+  }
+</style>
+</helmet>
+<div lang="pt-BR" style="--bg:{{ c.bg }}; --ink:{{ c.ink }}; --soft:{{ c.soft }}; --mute:{{ c.mute }}; --rule:{{ c.rule }}; --acc:{{ c.acc }}; min-height:100vh; background:var(--bg,#faf7f1); color:var(--ink,#2b2621); font-family:'Lora',Georgia,'Times New Roman',serif; font-size:16px; font-variant-numeric:oldstyle-nums; padding-bottom:8vh; transition:background-color .6s ease, color .6s ease;">
+
+  <div data-chrome="1" style="position:fixed; top:0; left:0; height:1.5px; background:var(--acc,#a2603e); opacity:0.5; z-index:40; transition:width .12s linear; width:{{ progress }}"></div>
+
+  <header data-chrome="1" style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; padding:40px 24px 0;">
+    <button onClick="{{ openSearch }}" title="Buscar (/)" style="justify-self:start; background:none; border:0; padding:0; cursor:pointer; font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--mute,#a89d90); transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Buscar</button>
+    <a href="#/" style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.26em; text-transform:uppercase; color:var(--soft,#8d8378); transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">{{ siteTitle }}</a>
+    <button onClick="{{ toggleTheme }}" title="{{ themeLabel }}" style="justify-self:end; background:none; border:0; padding:0; cursor:pointer; display:flex; align-items:center; gap:8px;">
+      <span style="display:block; width:7px; height:7px; border-radius:50%; border:1px solid var(--mute,#a89d90); transition:background-color .5s ease; background:{{ themeDot }}"></span>
+    </button>
+  </header>
+
+  <sc-if value="{{ searchOpen }}">
+    <div data-chrome="1" style="position:fixed; inset:0; z-index:60; background:var(--bg,#faf7f1); padding:14vh 26px 0; overflow:auto;">
+      <div style="max-width:640px; margin:0 auto;">
+        <input placeholder="Buscar por título, tópico ou relação" value="{{ query }}" onChange="{{ onQuery }}" onKeyDown="{{ onSearchKey }}" ref="{{ searchRef }}" style="width:100%; font-family:'Lora',Georgia,serif; font-size:clamp(20px,3.6vw,26px); color:var(--ink,#2b2621); padding:0 0 16px;" />
+        <div style="height:1px; background:var(--rule,#e6ddd0);"></div>
+        <div style="display:flex; flex-direction:column; margin-top:40px;">
+          <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
+            <a href="#/post/{{ r.slug }}" onClick="{{ closeSearch }}" style="display:block; padding:16px 0; border-bottom:1px solid var(--rule,#e6ddd0); opacity:{{ r.dim }}; transition:opacity .3s ease;">
+              <p style="font-family:'Inter',system-ui,sans-serif; font-size:9.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--acc,#a2603e); margin:0 0 8px;">{{ r.meta }}</p>
+              <p style="margin:0; font-size:19px; line-height:1.5;">{{ r.title }}</p>
+            </a>
+          </sc-for>
+          <sc-if value="{{ noResults }}">
+            <p style="font-size:17px; color:var(--mute,#a89d90); font-style:italic; margin:0;">Nada por aqui ainda.</p>
+          </sc-if>
+        </div>
+        <p style="font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--mute,#a89d90); margin:44px 0 0;">Esc para fechar</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <main>
+
+    <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <section style="max-width:720px; margin:0 auto; padding:15vh 26px 0; text-align:center;">
+        <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.24em; text-transform:uppercase; color:var(--acc,#a2603e); margin:0 0 28px;">{{ featured.category }} · {{ featured.topic }}</p>
+        <h1 style="font-weight:400; font-size:clamp(30px,6.4vw,46px); line-height:1.28; letter-spacing:-0.012em; margin:0; text-wrap:balance; view-transition-name:{{ featured.vt }}">
+          <a href="#/post/{{ featured.slug }}" style="transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">{{ featured.title }}</a>
+        </h1>
+        <div style="width:34px; height:1px; background:var(--rule,#d8cec0); margin:40px auto 32px;"></div>
+        <p style="max-width:520px; margin:0 auto; font-size:17px; line-height:1.85; color:var(--soft,#6f675e); hyphens:auto;">{{ featured.excerpt }}</p>
+      </section>
+
+      <section style="max-width:760px; margin:0 auto; padding:14vh 26px 0;">
+        <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.24em; text-transform:uppercase; color:var(--mute,#a89d90); margin:0 0 6vh; text-align:center;">Cinco relações</p>
+        <div style="display:flex; flex-direction:column; gap:9vh;">
+          <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="5">
+            <div data-reveal="1" style="opacity:0; transform:translateY(12px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.3,1);">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; gap:16px;">
+                <a href="#/categoria/{{ cat.slug }}" style="font-size:clamp(21px,3.4vw,27px); font-weight:400; letter-spacing:-0.01em; transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">{{ cat.name }}</a>
+                <span style="font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.18em; color:var(--mute,#a89d90);">{{ cat.count }}</span>
+              </div>
+              <div style="height:1px; background:var(--rule,#e6ddd0); margin:20px 0 24px;"></div>
+              <div style="display:flex; flex-direction:column; gap:24px;">
+                <sc-for list="{{ cat.topics }}" as="tp" hint-placeholder-count="3">
+                  <div style="display:grid; grid-template-columns:minmax(96px,20%) 1fr; gap:18px; align-items:baseline;">
+                    <a href="#/topico/{{ tp.slug }}" style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--mute,#a89d90); padding-top:4px; transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">{{ tp.name }}</a>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                      <sc-for list="{{ tp.posts }}" as="p" hint-placeholder-count="1">
+                        <a href="#/post/{{ p.slug }}" style="font-size:17px; line-height:1.55; color:var(--soft,#4a423a); transition:color .4s ease; view-transition-name:{{ p.vt }}" style-hover="color:var(--acc,#a2603e)">{{ p.title }}</a>
+                      </sc-for>
+                      <sc-if value="{{ tp.empty }}">
+                        <span style="font-size:15px; color:var(--mute,#c0b6a8); font-style:italic;">em breve</span>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isList }}">
+      <section style="max-width:760px; margin:0 auto; padding:15vh 26px 0;">
+        <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.24em; text-transform:uppercase; color:var(--acc,#a2603e); margin:0 0 22px; text-align:center;">{{ list.kicker }}</p>
+        <h1 style="font-weight:400; font-size:clamp(26px,5vw,38px); letter-spacing:-0.012em; margin:0; text-align:center;">{{ list.name }}</h1>
+        <div style="width:34px; height:1px; background:var(--rule,#d8cec0); margin:36px auto 9vh;"></div>
+        <div style="display:flex; flex-direction:column; gap:7vh;">
+          <sc-for list="{{ list.groups }}" as="g" hint-placeholder-count="4">
+            <div data-reveal="1" style="opacity:0; transform:translateY(12px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.3,1);">
+              <sc-if value="{{ g.showLabel }}">
+                <a href="#/topico/{{ g.slug }}" style="display:inline-block; font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--acc,#a2603e); margin:0 0 20px; transition:opacity .4s ease;" style-hover="opacity:0.6">{{ g.name }}</a>
+              </sc-if>
+              <div style="display:flex; flex-direction:column; gap:16px;">
+                <sc-for list="{{ g.posts }}" as="p" hint-placeholder-count="1">
+                  <a href="#/post/{{ p.slug }}" style="font-size:19px; line-height:1.5; transition:color .4s ease; view-transition-name:{{ p.vt }}" style-hover="color:var(--acc,#a2603e)">{{ p.title }}</a>
+                </sc-for>
+                <sc-if value="{{ g.empty }}">
+                  <span style="font-size:15px; color:var(--mute,#c0b6a8); font-style:italic;">em breve</span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ isPost }}">
+      <sc-if value="{{ showRail }}">
+        <nav data-chrome="1" style="position:fixed; left:44px; top:50%; transform:translateY(-50%); z-index:30; display:flex; flex-direction:column; gap:14px;">
+          <sc-for list="{{ marks }}" as="m" hint-placeholder-count="3">
+            <a title="{{ m.label }}" onClick="{{ m.go }}" style="display:flex; align-items:center; gap:10px; height:12px; cursor:pointer;">
+              <span style="display:block; height:1px; background:var(--ink,#2b2621); transition:width .5s cubic-bezier(.2,.7,.3,1), opacity .5s ease; width:{{ m.w }}; opacity:{{ m.o }}"></span>
+              <span style="font-family:'Inter',system-ui,sans-serif; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--mute,#a89d90); white-space:nowrap; transition:opacity .5s ease; opacity:{{ m.t }}">{{ m.label }}</span>
+            </a>
+          </sc-for>
+        </nav>
+      </sc-if>
+
+      <article data-article="1" style="max-width:650px; margin:0 auto; padding:14vh 26px 0;">
+        <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.26em; text-transform:uppercase; color:var(--acc,#a2603e); margin:0 0 32px; text-align:center; display:flex; justify-content:center; gap:10px;">
+          <a href="#/categoria/{{ post.catSlug }}">{{ post.category }}</a>
+          <span style="opacity:0.45;">/</span>
+          <a href="#/topico/{{ post.topicSlug }}" style="opacity:0.75;">{{ post.topic }}</a>
+        </p>
+        <h1 style="font-weight:400; font-size:clamp(28px,5.2vw,33px); line-height:1.36; letter-spacing:-0.01em; margin:0; text-align:center; text-wrap:balance; view-transition-name:{{ post.vt }}">{{ post.title }}</h1>
+        <div style="width:34px; height:1px; background:var(--rule,#d8cec0); margin:48px auto 0;"></div>
+
+        <sc-if value="{{ resume.show }}">
+          <div data-chrome="1" style="text-align:center; padding:26px 0 0;">
+            <a onClick="{{ resume.go }}" style="font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute,#a89d90); cursor:pointer; transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Retomar em {{ resume.pct }}</a>
+          </div>
+        </sc-if>
+
+        <div style="display:flex; flex-direction:column; padding-top:56px;">
+          <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8">
+            <div id="{{ b.id }}" data-reveal="1" style="opacity:0; transform:translateY(10px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.3,1); scroll-margin-top:14vh;">
+              <sc-if value="{{ b.isHeading }}">
+                <h2 style="font-weight:400; font-size:20px; line-height:1.6; color:var(--soft,#5c5247); margin:56px 0 16px;">{{ b.text }}</h2>
+              </sc-if>
+              <sc-if value="{{ b.isLead }}">
+                <p style="font-size:clamp(18px,2.2vw,19px); line-height:1.95; color:var(--ink,#332e28); margin:0 0 40px; hyphens:auto; text-wrap:pretty;"><span style="font-variant-caps:small-caps; letter-spacing:0.08em; font-size:1.02em;">{{ b.lead }}</span>{{ b.text }}</p>
+              </sc-if>
+              <sc-if value="{{ b.isText }}">
+                <p style="font-size:clamp(18px,2.2vw,19px); line-height:1.95; color:var(--ink,#332e28); margin:0 0 40px; hyphens:auto; text-wrap:pretty;">{{ b.text }}</p>
+              </sc-if>
+              <sc-if value="{{ b.isClosing }}">
+                <div style="min-height:66vh; display:flex; align-items:center; padding:8vh 0 4vh;">
+                  <p style="font-size:clamp(19px,2.6vw,21px); line-height:1.85; color:var(--soft,#7a6f63); font-style:italic; margin:0; text-wrap:pretty;">{{ b.text }}</p>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="width:34px; height:1px; background:var(--rule,#d8cec0); margin:0 auto 5vh;"></div>
+
+        <div style="text-align:center; padding-bottom:6vh;">
+          <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute,#a89d90); margin:0 0 18px;">{{ next.label }}</p>
+          <a href="#/post/{{ next.slug }}" style="font-size:21px; line-height:1.5; transition:color .4s ease; view-transition-name:{{ next.vt }}" style-hover="color:var(--acc,#a2603e)">{{ next.title }}</a>
+        </div>
+      </article>
+    </sc-if>
+
+  </main>
+
+  <footer data-chrome="1" style="max-width:760px; margin:0 auto; padding:12vh 26px 0; text-align:center;">
+    <div style="height:1px; background:var(--rule,#e6ddd0); margin-bottom:26px;"></div>
+    <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--mute,#b3a99c); margin:0;">{{ siteTitle }}</p>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#a2603e&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#a2603e&quot;,&quot;#8a6a4f&quot;,&quot;#7d6b58&quot;,&quot;#9a5b52&quot;],&quot;section&quot;:&quot;Aparência&quot;},&quot;showRail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Leitura&quot;}}">
+const slugify = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const DAY = { bg: "#faf7f1", ink: "#2b2621", soft: "#6b6156", mute: "#a89d90", rule: "#e6ddd0", acc: "#a2603e" };
+const NIGHT = { bg: "#17140f", ink: "#e4dbcd", soft: "#a89c8b", mute: "#7d7264", rule: "#2e2820", acc: "#c1815a" };
+
+class Component extends DCLogic {
+  state = { data: null, route: { view: "home" }, progress: "0%", w: 1200, active: 0, theme: "day", searchOpen: false, query: "", sel: 0, resumeAt: 0 };
+
+  componentDidMount() {
+    this.routeAt = Date.now();
+    this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let theme = null;
+    try { theme = localStorage.getItem("ep:theme"); } catch (e) {}
+    if (!theme) theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "night" : "day";
+    const route = this.parse();
+    this.setState({ theme, route, w: window.innerWidth, resumeAt: this.readMark(route.slug) });
+    this.paintBody(theme);
+    fetch("posts.json").then((r) => r.json()).then((data) => { this.setState({ data }); setTimeout(() => this.attach(), 40); });
+
+    this.onHash = () => {
+      const next = this.parse();
+      const apply = () => this.setState({ route: next, progress: "0%", active: 0, searchOpen: false, resumeAt: this.readMark(next.slug) });
+      this.routeAt = Date.now();
+      this.everScrolled = false;
+      const go = () => {
+        window.scrollTo(0, 0);
+        if (document.startViewTransition && !this.reduced) {
+          document.startViewTransition(() => new Promise((res) => { apply(); requestAnimationFrame(() => setTimeout(res, 0)); }));
+        } else { apply(); }
+      };
+      go();
+    };
+    this.onScroll = () => {
+      this.attach();
+      const a = document.querySelector("[data-article]");
+      const vh = window.innerHeight || 800;
+      let progress = "0%";
+      let frac = 0;
+      if (a) {
+        const r = a.getBoundingClientRect();
+        const total = Math.max(1, r.height - vh * 0.6);
+        frac = Math.max(0, Math.min(1, -r.top / total));
+        progress = frac * 100 + "%";
+      }
+      const hs = Array.from(document.querySelectorAll("[data-article] h2"));
+      let active = 0;
+      hs.forEach((h, i) => { if (h.getBoundingClientRect().top < vh * 0.4) active = i + 1; });
+      this.setState({ progress, active });
+      if (a && this.state.route.slug) this.writeMark(this.state.route.slug, frac);
+    };
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onKey = (e) => {
+      if (e.key === "/" && !this.state.searchOpen && !/input|textarea/i.test((e.target.tagName || ""))) { e.preventDefault(); this.setState({ searchOpen: true, query: "", sel: 0 }); }
+      else if (e.key === "Escape" && this.state.searchOpen) this.setState({ searchOpen: false });
+    };
+    window.addEventListener("hashchange", this.onHash);
+    window.addEventListener("scroll", this.onScroll, { passive: true });
+    window.addEventListener("resize", this.onResize);
+    window.addEventListener("keydown", this.onKey);
+    this.tick = setInterval(() => { this.attach(); if (this.state.route.view === "post") this.onScroll(); }, 200);
+  }
+
+  componentDidUpdate(prev) {
+    this.attach();
+    if (prev.theme !== this.state.theme) this.paintBody(this.state.theme);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("hashchange", this.onHash);
+    window.removeEventListener("scroll", this.onScroll);
+    window.removeEventListener("resize", this.onResize);
+    window.removeEventListener("keydown", this.onKey);
+    clearInterval(this.tick);
+  }
+
+  paintBody(theme) { document.body.style.background = (theme === "night" ? NIGHT : DAY).bg; }
+
+  readMark(slug) { try { return parseFloat(localStorage.getItem("ep:read:" + slug) || "0") || 0; } catch (e) { return 0; } }
+  writeMark(slug, frac) {
+    if (Date.now() - (this.lastWrite || 0) < 700) return;
+    this.lastWrite = Date.now();
+    try { localStorage.setItem("ep:read:" + slug, String(frac)); } catch (e) {}
+  }
+
+  revealAll() { document.querySelectorAll("[data-reveal]").forEach((n) => { n.style.opacity = "1"; n.style.transform = "none"; }); }
+
+  attach() {
+    const vh = window.innerHeight || 800;
+    const se = document.scrollingElement || document.documentElement;
+    if (this.reduced) return this.revealAll();
+    if (se.scrollHeight <= se.clientHeight + 4) return this.revealAll();
+    if (!this.everScrolled && Date.now() - (this.routeAt || 0) > 2200) return this.revealAll();
+    if ((se.scrollTop || window.scrollY || 0) > 0) this.everScrolled = true;
+    document.querySelectorAll("[data-reveal]").forEach((n) => {
+      if (n.style.opacity === "1") return;
+      const r = n.getBoundingClientRect();
+      if (r.top < vh * 0.94 && r.bottom > -vh) { n.style.opacity = "1"; n.style.transform = "none"; }
+    });
+  }
+
+  parse() {
+    const h = (window.location.hash || "#/").replace(/^#/, "");
+    const p = h.split("/").filter(Boolean);
+    if (p[0] === "post" && p[1]) return { view: "post", slug: p[1] };
+    if (p[0] === "categoria" && p[1]) return { view: "category", slug: p[1] };
+    if (p[0] === "topico" && p[1]) return { view: "topic", slug: p[1] };
+    return { view: "home" };
+  }
+
+  parseBody(text) {
+    const raw = (text || "").split(/\n{2,}/).map((s) => s.trim()).filter(Boolean);
+    let hi = 0;
+    let leadDone = false;
+    return raw.map((t, i) => {
+      const isHeading = t.startsWith("## ");
+      if (isHeading) hi += 1;
+      const isClosing = !isHeading && i === raw.length - 1;
+      const isLead = !isHeading && !isClosing && !leadDone;
+      if (isLead) leadDone = true;
+      const words = t.split(" ");
+      return {
+        id: isHeading ? "s" + hi : "b" + i,
+        isHeading,
+        isLead,
+        isText: !isHeading && !isClosing && !isLead,
+        isClosing,
+        lead: isLead ? words.slice(0, 3).join(" ") + " " : "",
+        text: isHeading ? t.slice(3) : isLead ? words.slice(3).join(" ") : t,
+      };
+    });
+  }
+
+  renderVals() {
+    const d = this.state.data;
+    const s = this.state;
+    const pal = s.theme === "night" ? NIGHT : DAY;
+    const c = { ...pal, acc: this.props.accent || pal.acc };
+    const base = {
+      c, siteTitle: d ? d.site.title : "", progress: s.progress,
+      isHome: false, isList: false, isPost: false, showRail: false, marks: [], searchOpen: s.searchOpen, query: s.query,
+      results: [], noResults: false, resume: { show: false },
+      themeLabel: s.theme === "night" ? "Modo dia" : "Modo noite",
+      themeDot: s.theme === "night" ? c.acc : "transparent",
+      toggleTheme: () => {
+        const t = s.theme === "night" ? "day" : "night";
+        try { localStorage.setItem("ep:theme", t); } catch (e) {}
+        this.setState({ theme: t });
+      },
+      openSearch: () => this.setState({ searchOpen: true, query: "", sel: 0 }),
+      closeSearch: () => this.setState({ searchOpen: false }),
+      onQuery: (e) => this.setState({ query: e.target.value, sel: 0 }),
+      searchRef: (el) => { if (el && document.activeElement !== el) el.focus(); },
+    };
+    if (!d) return base;
+
+    const posts = d.posts.map((p) => ({ ...p, slug: slugify(p.title), catSlug: slugify(p.category), topicSlug: slugify(p.topic), vt: "vt-" + slugify(p.title) }));
+    const cats = d.categories.map((cat) => {
+      const topics = cat.topics.map((t) => {
+        const list = posts.filter((p) => p.topic === t);
+        return { name: t, slug: slugify(t), posts: list, empty: list.length === 0 };
+      });
+      return { name: cat.name, slug: slugify(cat.name), topics, count: posts.filter((p) => p.category === cat.name).length };
+    });
+
+    const q = norm(s.query).trim();
+    const pool = q ? posts.filter((p) => norm(p.title + " " + p.topic + " " + p.category).includes(q)) : posts;
+    base.results = pool.slice(0, 8).map((p, i) => ({ slug: p.slug, title: p.title, meta: p.category + " · " + p.topic, dim: i === s.sel ? 1 : 0.55 }));
+    base.noResults = q.length > 0 && pool.length === 0;
+    base.onSearchKey = (e) => {
+      if (e.key === "ArrowDown") { e.preventDefault(); this.setState({ sel: Math.min(base.results.length - 1, s.sel + 1) }); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); this.setState({ sel: Math.max(0, s.sel - 1) }); }
+      else if (e.key === "Enter" && base.results[s.sel]) { window.location.hash = "#/post/" + base.results[s.sel].slug; }
+      else if (e.key === "Escape") this.setState({ searchOpen: false });
+    };
+
+    const r = s.route;
+    if (r.view === "post") {
+      const post = posts.find((p) => p.slug === r.slug) || posts[0];
+      const blocks = this.parseBody(post.body);
+      const rest = posts.filter((p) => p.slug !== post.slug);
+      const sameTopic = rest.filter((p) => p.topic === post.topic);
+      const nx = sameTopic[0] || rest.filter((p) => p.category === post.category)[0] || rest[0] || post;
+      const headings = blocks.filter((b) => b.isHeading);
+      const showRail = this.props.showRail !== false && s.w >= 1120 && headings.length > 1;
+      const marks = headings.map((b, i) => {
+        const on = s.active === i + 1;
+        return {
+          label: b.text, w: on ? "26px" : "14px", o: on ? 0.5 : 0.18, t: on ? 1 : 0,
+          go: () => { const el = document.getElementById(b.id); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.18, behavior: this.reduced ? "auto" : "smooth" }); },
+        };
+      });
+      const rm = s.resumeAt;
+      const resume = rm > 0.08 && rm < 0.94
+        ? { show: true, pct: Math.round(rm * 100) + "%", go: () => { const a = document.querySelector("[data-article]"); if (!a) return; const target = a.offsetTop + rm * (a.offsetHeight - window.innerHeight * 0.6); this.revealAll(); window.scrollTo({ top: target, behavior: this.reduced ? "auto" : "smooth" }); } }
+        : { show: false };
+      return { ...base, isPost: true, post, blocks, showRail, marks, resume, next: { label: sameTopic.length ? "Ainda sobre " + post.topic.toLowerCase() : "Continuar lendo", title: nx.title, slug: nx.slug, vt: nx.vt } };
+    }
+    if (r.view === "category") {
+      const cat = cats.find((x) => x.slug === r.slug) || cats[0];
+      const groups = cat.topics.map((t) => ({ ...t, showLabel: true }));
+      return { ...base, isList: true, list: { kicker: "Relação", name: cat.name, groups } };
+    }
+    if (r.view === "topic") {
+      const all = [];
+      cats.forEach((cat) => cat.topics.forEach((t) => all.push({ ...t, category: cat.name })));
+      const t = all.find((x) => x.slug === r.slug) || all[0];
+      return { ...base, isList: true, list: { kicker: t.category, name: t.name, groups: [{ ...t, showLabel: false }] } };
+    }
+    const f = posts[0];
+    return { ...base, isHome: true, categories: cats, featured: { ...f, excerpt: (f.body.split(/\n{2,}/)[0] || "").slice(0, 190).replace(/[\s.,;:]+$/, "") + "…" } };
+  }
+}
+
+</script>
+</body>
+</html>
