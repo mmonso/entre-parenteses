@@ -1,0 +1,2 @@
+# O publicar.mjs grava posts.json com LF; sem isso o git avisa a cada commit.
+posts.json text eol=lf

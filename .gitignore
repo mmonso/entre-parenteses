@@ -5,6 +5,10 @@
 .vercel
 .env*
 
+# Anotacoes e rascunhos que nao vao pro site
+contexto-conversa-postagem.md
+rascunhos/
+
 # Sistema
 Thumbs.db
 desktop.ini
