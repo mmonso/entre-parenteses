@@ -214,7 +214,7 @@ class Component extends DCLogic {
     this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let theme = null;
     try { theme = localStorage.getItem("ep:theme"); } catch (e) {}
-    if (!theme) theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "night" : "day";
+    if (!theme) theme = "day";
     const route = this.parse();
     this.setState({ theme, route, w: window.innerWidth, resumeAt: this.readMark(route.slug) });
     this.paintBody(theme);
