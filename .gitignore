@@ -3,6 +3,7 @@
 
 # Vercel
 .vercel
+.env*
 
 # Sistema
 Thumbs.db
