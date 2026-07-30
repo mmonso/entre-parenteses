@@ -1,7 +1,8 @@
 {
   "site": {
     "title": "Entre parênteses",
-    "tagline": "Ensaios de psicologia sobre as relações que nos constituem."
+    "tagline": "Ensaios de psicologia sobre as relações que nos constituem.",
+    "url": "https://entre-parenteses.vercel.app"
   },
   "categories": [
     {
@@ -51,6 +52,7 @@
   "posts": [
     {
       "title": "A autenticidade que virou performance",
+      "slug": "a-autenticidade-que-virou-performance",
       "category": "Relação consigo",
       "topic": "Autenticidade",
       "date": "2026-07-29",
@@ -58,6 +60,7 @@
     },
     {
       "title": "A solidão que não é falta de gente",
+      "slug": "a-solidao-que-nao-e-falta-de-gente",
       "category": "Relação consigo",
       "topic": "Solidão",
       "date": "2026-06-12",
@@ -65,6 +68,7 @@
     },
     {
       "title": "A voz que corrige antes de você terminar a frase",
+      "slug": "a-voz-que-corrige-antes-de-voce-terminar-a-frase",
       "category": "Relação consigo",
       "topic": "Autocrítica",
       "date": "2026-05-28",
@@ -72,6 +76,7 @@
     },
     {
       "title": "O ciúme não fala do outro",
+      "slug": "o-ciume-nao-fala-do-outro",
       "category": "Relação com o outro",
       "topic": "Ciúme",
       "date": "2026-05-04",
@@ -79,6 +84,7 @@
     },
     {
       "title": "O luto não é uma linha reta",
+      "slug": "o-luto-nao-e-uma-linha-reta",
       "category": "Relação com o tempo",
       "topic": "Luto",
       "date": "2026-04-16",

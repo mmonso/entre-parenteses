@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://entre-parenteses.vercel.app/sitemap.xml

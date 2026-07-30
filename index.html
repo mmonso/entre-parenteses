@@ -1,8 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Estas tags valem pra home e pro robô que não roda JS. Nas rotas internas o
+     componente reescreve title/description/canonical/og (ver setMeta, abaixo).
+     O preview por post de verdade vem das paginas estaticas em /post/<slug>,
+     geradas pelo publicar.mjs — robô de rede social não enxerga o #hash. -->
+<title>Entre parênteses — ensaios de psicologia</title>
+<meta name="description" content="Ensaios de psicologia sobre as relações que nos constituem.">
+<link rel="canonical" href="https://entre-parenteses.vercel.app/">
+<meta name="theme-color" content="#faf7f1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23faf7f1'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' fill='%23a2603e' text-anchor='middle'%3E()%3C/text%3E%3C/svg%3E">
+<meta property="og:site_name" content="Entre parênteses">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Entre parênteses">
+<meta property="og:description" content="Ensaios de psicologia sobre as relações que nos constituem.">
+<meta property="og:url" content="https://entre-parenteses.vercel.app/">
+<meta name="twitter:card" content="summary">
+
 <script src="./support.js"></script>
 </head>
 <body>
@@ -38,9 +56,9 @@
   <div data-chrome="1" style="position:fixed; top:0; left:0; height:1.5px; background:var(--acc,#a2603e); opacity:0.5; z-index:40; transition:width .12s linear; width:{{ progress }}"></div>
 
   <header data-chrome="1" style="display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:12px; padding:40px 24px 0;">
-    <button onClick="{{ openSearch }}" title="Buscar (/)" style="justify-self:start; background:none; border:0; padding:0; cursor:pointer; font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--mute,#a89d90); transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Buscar</button>
+    <button onClick="{{ openSearch }}" title="Buscar (/)" aria-label="Buscar (atalho: barra)" style="justify-self:start; background:none; border:0; padding:0; cursor:pointer; font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--mute,#a89d90); transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Buscar</button>
     <a href="#/" style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.26em; text-transform:uppercase; color:var(--soft,#8d8378); transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">{{ siteTitle }}</a>
-    <button onClick="{{ toggleTheme }}" title="{{ themeLabel }}" style="justify-self:end; background:none; border:0; padding:0; cursor:pointer; display:flex; align-items:center; gap:8px;">
+    <button onClick="{{ toggleTheme }}" title="{{ themeLabel }}" aria-label="{{ themeLabel }}" style="justify-self:end; background:none; border:0; padding:0; cursor:pointer; display:flex; align-items:center; gap:8px;">
       <span style="display:block; width:7px; height:7px; border-radius:50%; border:1px solid var(--mute,#a89d90); transition:background-color .5s ease; background:{{ themeDot }}"></span>
     </button>
   </header>
@@ -48,7 +66,7 @@
   <sc-if value="{{ searchOpen }}">
     <div data-chrome="1" style="position:fixed; inset:0; z-index:60; background:var(--bg,#faf7f1); padding:14vh 26px 0; overflow:auto;">
       <div style="max-width:640px; margin:0 auto;">
-        <input placeholder="Buscar por título, tópico ou relação" value="{{ query }}" onChange="{{ onQuery }}" onKeyDown="{{ onSearchKey }}" ref="{{ searchRef }}" style="width:100%; font-family:'Lora',Georgia,serif; font-size:clamp(20px,3.6vw,26px); color:var(--ink,#2b2621); padding:0 0 16px;" />
+        <input type="search" aria-label="Buscar no site" placeholder="Buscar por título, tópico ou texto" value="{{ query }}" onChange="{{ onQuery }}" onKeyDown="{{ onSearchKey }}" ref="{{ searchRef }}" style="width:100%; font-family:'Lora',Georgia,serif; font-size:clamp(20px,3.6vw,26px); color:var(--ink,#2b2621); padding:0 0 16px;" />
         <div style="height:1px; background:var(--rule,#e6ddd0);"></div>
         <div style="display:flex; flex-direction:column; margin-top:40px;">
           <sc-for list="{{ results }}" as="r" hint-placeholder-count="3">
@@ -136,12 +154,12 @@
 
     <sc-if value="{{ isPost }}">
       <sc-if value="{{ showRail }}">
-        <nav data-chrome="1" style="position:fixed; left:44px; top:50%; transform:translateY(-50%); z-index:30; display:flex; flex-direction:column; gap:14px;">
+        <nav data-chrome="1" aria-label="Seções do ensaio" style="position:fixed; left:44px; top:50%; transform:translateY(-50%); z-index:30; display:flex; flex-direction:column; gap:14px;">
           <sc-for list="{{ marks }}" as="m" hint-placeholder-count="3">
-            <a title="{{ m.label }}" onClick="{{ m.go }}" style="display:flex; align-items:center; gap:10px; height:12px; cursor:pointer;">
+            <button title="{{ m.label }}" aria-label="Ir para: {{ m.label }}" onClick="{{ m.go }}" style="display:flex; align-items:center; gap:10px; height:12px; cursor:pointer; background:none; border:0; padding:0; text-align:left;">
               <span style="display:block; height:1px; background:var(--ink,#2b2621); transition:width .5s cubic-bezier(.2,.7,.3,1), opacity .5s ease; width:{{ m.w }}; opacity:{{ m.o }}"></span>
               <span style="font-family:'Inter',system-ui,sans-serif; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--mute,#a89d90); white-space:nowrap; transition:opacity .5s ease; opacity:{{ m.t }}">{{ m.label }}</span>
-            </a>
+            </button>
           </sc-for>
         </nav>
       </sc-if>
@@ -151,13 +169,15 @@
           <a href="#/categoria/{{ post.catSlug }}">{{ post.category }}</a>
           <span style="opacity:0.45;">/</span>
           <a href="#/topico/{{ post.topicSlug }}" style="opacity:0.75;">{{ post.topic }}</a>
+          <span style="opacity:0.4;">·</span>
+          <span style="opacity:0.6; color:var(--mute,#8a8074);">{{ post.dateLabel }}</span>
         </p>
         <h1 style="font-weight:400; font-size:clamp(28px,5.2vw,33px); line-height:1.36; letter-spacing:-0.01em; margin:0; text-align:center; text-wrap:balance; view-transition-name:{{ post.vt }}">{{ post.title }}</h1>
         <div style="width:34px; height:1px; background:var(--rule,#d8cec0); margin:48px auto 0;"></div>
 
         <sc-if value="{{ resume.show }}">
           <div data-chrome="1" style="text-align:center; padding:26px 0 0;">
-            <a onClick="{{ resume.go }}" style="font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute,#a89d90); cursor:pointer; transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Retomar em {{ resume.pct }}</a>
+            <button onClick="{{ resume.go }}" style="font-family:'Inter',system-ui,sans-serif; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute,#a89d90); cursor:pointer; background:none; border:0; padding:0; transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Retomar em {{ resume.pct }}</button>
           </div>
         </sc-if>
 
@@ -191,6 +211,16 @@
       </article>
     </sc-if>
 
+    <sc-if value="{{ isMissing }}">
+      <section style="max-width:600px; margin:0 auto; padding:20vh 26px 0; text-align:center;">
+        <p style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.24em; text-transform:uppercase; color:var(--acc,#a2603e); margin:0 0 26px;">Não encontrado</p>
+        <h1 style="font-weight:400; font-size:clamp(26px,5vw,36px); line-height:1.3; letter-spacing:-0.012em; margin:0; text-wrap:balance;">Esse texto não está aqui</h1>
+        <div style="width:34px; height:1px; background:var(--rule,#d8cec0); margin:40px auto 32px;"></div>
+        <p style="font-size:17px; line-height:1.85; color:var(--soft,#6f675e); margin:0 0 40px;">O endereço pode ter mudado de nome, ou o ensaio ainda não foi publicado.</p>
+        <a href="#/" style="font-family:'Inter',system-ui,sans-serif; font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase; color:var(--mute,#8a8074); transition:color .4s ease;" style-hover="color:var(--acc,#a2603e)">Voltar ao início</a>
+      </section>
+    </sc-if>
+
   </main>
 
   <footer data-chrome="1" style="max-width:760px; margin:0 auto; padding:12vh 26px 0; text-align:center;">
@@ -201,16 +231,36 @@
 
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#a2603e&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#a2603e&quot;,&quot;#8a6a4f&quot;,&quot;#7d6b58&quot;,&quot;#9a5b52&quot;],&quot;section&quot;:&quot;Aparência&quot;},&quot;showRail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Leitura&quot;}}">
+// So vale pra post antigo sem "slug" gravado. Publicado pelo publicar.mjs, o
+// slug vem pronto do posts.json e nunca muda, mesmo que o titulo seja reescrito.
 const slugify = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const slugDe = (p) => p.slug || slugify(p.title);
 const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-const DAY = { bg: "#faf7f1", ink: "#2b2621", soft: "#6b6156", mute: "#a89d90", rule: "#e6ddd0", acc: "#a2603e" };
-const NIGHT = { bg: "#17140f", ink: "#e4dbcd", soft: "#a89c8b", mute: "#7d7264", rule: "#2e2820", acc: "#c1815a" };
+
+// mute foi escurecido: no tom antigo (#a89d90) o texto de 10px dava 2.5:1 de
+// contraste, menos da metade do minimo legivel. Agora dia 4.7:1, noite 4.9:1.
+const DAY = { bg: "#faf7f1", ink: "#2b2621", soft: "#6b6156", mute: "#776d60", rule: "#e6ddd0", acc: "#a2603e" };
+const NIGHT = { bg: "#17140f", ink: "#e4dbcd", soft: "#a89c8b", mute: "#8d8271", rule: "#2e2820", acc: "#c1815a" };
+
+const MESES = ["janeiro", "fevereiro", "mar\u00e7o", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+const dataPorExtenso = (iso) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  return m ? Number(m[3]) + " de " + MESES[Number(m[2]) - 1] + " de " + m[1] : "";
+};
+
+// Mesmo resumo que o publicar.mjs grava nas paginas estaticas \u2014 se mexer aqui,
+// mexa la tambem, senao o preview do link diverge do site.
+const resumoDe = (body) => {
+  const abertura = (body || "").split(/\n{2,}/).map((s) => s.trim()).filter(Boolean).find((b) => !b.startsWith("## ")) || "";
+  if (abertura.length <= 160) return abertura;
+  const corte = abertura.slice(0, 158);
+  return corte.slice(0, corte.lastIndexOf(" ")).replace(/[\s.,;:\u2014-]+$/, "") + "\u2026";
+};
 
 class Component extends DCLogic {
   state = { data: null, route: { view: "home" }, progress: "0%", w: 1200, active: 0, theme: "day", searchOpen: false, query: "", sel: 0, resumeAt: 0 };
 
   componentDidMount() {
-    this.routeAt = Date.now();
     this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let theme = null;
     try { theme = localStorage.getItem("ep:theme"); } catch (e) {}
@@ -218,38 +268,20 @@ class Component extends DCLogic {
     const route = this.parse();
     this.setState({ theme, route, w: window.innerWidth, resumeAt: this.readMark(route.slug) });
     this.paintBody(theme);
-    fetch("posts.json").then((r) => r.json()).then((data) => { this.setState({ data }); setTimeout(() => this.attach(), 40); });
+    fetch("posts.json").then((r) => r.json()).then((data) => this.setState({ data }));
 
     this.onHash = () => {
       const next = this.parse();
       const apply = () => this.setState({ route: next, progress: "0%", active: 0, searchOpen: false, resumeAt: this.readMark(next.slug) });
-      this.routeAt = Date.now();
-      this.everScrolled = false;
-      const go = () => {
-        window.scrollTo(0, 0);
-        if (document.startViewTransition && !this.reduced) {
-          document.startViewTransition(() => new Promise((res) => { apply(); requestAnimationFrame(() => setTimeout(res, 0)); }));
-        } else { apply(); }
-      };
-      go();
+      window.scrollTo(0, 0);
+      if (document.startViewTransition && !this.reduced) {
+        document.startViewTransition(() => new Promise((res) => { apply(); requestAnimationFrame(() => setTimeout(res, 0)); }));
+      } else { apply(); }
     };
+    // O scroll so agenda; quem mede roda no maximo uma vez por quadro.
     this.onScroll = () => {
-      this.attach();
-      const a = document.querySelector("[data-article]");
-      const vh = window.innerHeight || 800;
-      let progress = "0%";
-      let frac = 0;
-      if (a) {
-        const r = a.getBoundingClientRect();
-        const total = Math.max(1, r.height - vh * 0.6);
-        frac = Math.max(0, Math.min(1, -r.top / total));
-        progress = frac * 100 + "%";
-      }
-      const hs = Array.from(document.querySelectorAll("[data-article] h2"));
-      let active = 0;
-      hs.forEach((h, i) => { if (h.getBoundingClientRect().top < vh * 0.4) active = i + 1; });
-      this.setState({ progress, active });
-      if (a && this.state.route.slug) this.writeMark(this.state.route.slug, frac);
+      if (this.raf) return;
+      this.raf = requestAnimationFrame(() => { this.raf = 0; this.medir(); });
     };
     this.onResize = () => this.setState({ w: window.innerWidth });
     this.onKey = (e) => {
@@ -260,12 +292,16 @@ class Component extends DCLogic {
     window.addEventListener("scroll", this.onScroll, { passive: true });
     window.addEventListener("resize", this.onResize);
     window.addEventListener("keydown", this.onKey);
-    this.tick = setInterval(() => { this.attach(); if (this.state.route.view === "post") this.onScroll(); }, 200);
   }
 
   componentDidUpdate(prev) {
-    this.attach();
     if (prev.theme !== this.state.theme) this.paintBody(this.state.theme);
+    // So quando o conteudo da pagina muda. Sem esse filtro, o observer seria
+    // religado a cada quadro de scroll — que e justamente o custo que ele evita.
+    if (prev.route !== this.state.route || prev.data !== this.state.data) {
+      this.observarReveals();
+      this.aplicarMeta();
+    }
   }
 
   componentWillUnmount() {
@@ -273,10 +309,48 @@ class Component extends DCLogic {
     window.removeEventListener("scroll", this.onScroll);
     window.removeEventListener("resize", this.onResize);
     window.removeEventListener("keydown", this.onKey);
-    clearInterval(this.tick);
+    if (this.io) this.io.disconnect();
+    if (this.raf) cancelAnimationFrame(this.raf);
   }
 
-  paintBody(theme) { document.body.style.background = (theme === "night" ? NIGHT : DAY).bg; }
+  paintBody(theme) {
+    const bg = (theme === "night" ? NIGHT : DAY).bg;
+    document.body.style.background = bg;
+    const tc = document.head.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute("content", bg);
+  }
+
+  // A meta e montada no renderVals (que ja tem o post em maos) e aplicada aqui,
+  // com o DOM pronto. Robô de rede social nao chega ate aqui: o preview do link
+  // vem das paginas estaticas em /post/<slug>, geradas pelo publicar.mjs.
+  aplicarMeta() {
+    const m = this.meta;
+    if (!m) return;
+    document.title = m.title;
+    const set = (sel, attr, val) => { const el = document.head.querySelector(sel); if (el) el.setAttribute(attr, val); };
+    set('meta[name="description"]', "content", m.desc);
+    set('link[rel="canonical"]', "href", m.url);
+    set('meta[property="og:title"]', "content", m.ogTitle);
+    set('meta[property="og:description"]', "content", m.desc);
+    set('meta[property="og:url"]', "content", m.url);
+    set('meta[property="og:type"]', "content", m.type);
+  }
+
+  medir() {
+    if (this.state.route.view !== "post") return;
+    const a = document.querySelector("[data-article]");
+    if (!a) return;
+    const vh = window.innerHeight || 800;
+    const r = a.getBoundingClientRect();
+    const total = Math.max(1, r.height - vh * 0.6);
+    const frac = Math.max(0, Math.min(1, -r.top / total));
+    // Passo de 0.5% para nao disparar um render a cada pixel rolado.
+    const progress = Math.round(frac * 200) / 2 + "%";
+    let active = 0;
+    document.querySelectorAll("[data-article] h2").forEach((h, i) => { if (h.getBoundingClientRect().top < vh * 0.4) active = i + 1; });
+    if (progress !== this.state.progress || active !== this.state.active) this.setState({ progress, active });
+    if (this.state.route.slug) this.writeMark(this.state.route.slug, frac);
+  }
 
   readMark(slug) { try { return parseFloat(localStorage.getItem("ep:read:" + slug) || "0") || 0; } catch (e) { return 0; } }
   writeMark(slug, frac) {
@@ -287,27 +361,33 @@ class Component extends DCLogic {
 
   revealAll() { document.querySelectorAll("[data-reveal]").forEach((n) => { n.style.opacity = "1"; n.style.transform = "none"; }); }
 
-  attach() {
-    const vh = window.innerHeight || 800;
-    const se = document.scrollingElement || document.documentElement;
-    if (this.reduced) return this.revealAll();
-    if (se.scrollHeight <= se.clientHeight + 4) return this.revealAll();
-    if (!this.everScrolled && Date.now() - (this.routeAt || 0) > 2200) return this.revealAll();
-    if ((se.scrollTop || window.scrollY || 0) > 0) this.everScrolled = true;
-    document.querySelectorAll("[data-reveal]").forEach((n) => {
-      if (n.style.opacity === "1") return;
-      const r = n.getBoundingClientRect();
-      if (r.top < vh * 0.94 && r.bottom > -vh) { n.style.opacity = "1"; n.style.transform = "none"; }
-    });
+  // Substitui o setInterval de 200ms que media tudo cinco vezes por segundo, de
+  // aba aberta ate aba fechada. O que ja nasce visivel aparece na hora; o resto,
+  // quando entra em cena. Sem timer, sem leitura de layout no caminho do scroll.
+  observarReveals() {
+    if (this.reduced || !window.IntersectionObserver) return this.revealAll();
+    if (!this.io) {
+      this.io = new IntersectionObserver((entradas) => {
+        entradas.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.style.opacity = "1";
+          e.target.style.transform = "none";
+          this.io.unobserve(e.target);
+        });
+      }, { rootMargin: "0px 0px -6% 0px" });
+    }
+    this.io.disconnect();
+    document.querySelectorAll("[data-reveal]").forEach((n) => { if (n.style.opacity !== "1") this.io.observe(n); });
   }
 
   parse() {
     const h = (window.location.hash || "#/").replace(/^#/, "");
     const p = h.split("/").filter(Boolean);
+    if (!p.length) return { view: "home" };
     if (p[0] === "post" && p[1]) return { view: "post", slug: p[1] };
     if (p[0] === "categoria" && p[1]) return { view: "category", slug: p[1] };
     if (p[0] === "topico" && p[1]) return { view: "topic", slug: p[1] };
-    return { view: "home" };
+    return { view: "missing" };
   }
 
   parseBody(text) {
@@ -340,7 +420,7 @@ class Component extends DCLogic {
     const c = { ...pal, acc: this.props.accent || pal.acc };
     const base = {
       c, siteTitle: d ? d.site.title : "", progress: s.progress,
-      isHome: false, isList: false, isPost: false, showRail: false, marks: [], searchOpen: s.searchOpen, query: s.query,
+      isHome: false, isList: false, isPost: false, isMissing: false, showRail: false, marks: [], searchOpen: s.searchOpen, query: s.query,
       results: [], noResults: false, resume: { show: false },
       themeLabel: s.theme === "night" ? "Modo dia" : "Modo noite",
       themeDot: s.theme === "night" ? c.acc : "transparent",
@@ -356,7 +436,16 @@ class Component extends DCLogic {
     };
     if (!d) return base;
 
-    const posts = d.posts.map((p) => ({ ...p, slug: slugify(p.title), catSlug: slugify(p.category), topicSlug: slugify(p.topic), vt: "vt-" + slugify(p.title) }));
+    const raiz = (d.site.url || "").replace(/\/$/, "");
+    // Guardada aqui, aplicada no componentDidUpdate (ver aplicarMeta).
+    this.meta = { title: d.site.title, ogTitle: d.site.title, desc: d.site.tagline, url: raiz + "/", type: "website" };
+    const naoEncontrado = () => {
+      this.meta = { title: "Não encontrado — " + d.site.title, ogTitle: d.site.title, desc: d.site.tagline, url: raiz + "/", type: "website" };
+      return { ...base, isMissing: true };
+    };
+    if (!d.posts.length) return naoEncontrado();
+
+    const posts = d.posts.map((p) => ({ ...p, slug: slugDe(p), catSlug: slugify(p.category), topicSlug: slugify(p.topic), vt: "vt-" + slugDe(p), dateLabel: dataPorExtenso(p.date) }));
     const cats = d.categories.map((cat) => {
       const topics = cat.topics.map((t) => {
         const list = posts.filter((p) => p.topic === t);
@@ -366,7 +455,11 @@ class Component extends DCLogic {
     });
 
     const q = norm(s.query).trim();
-    const pool = q ? posts.filter((p) => norm(p.title + " " + p.topic + " " + p.category).includes(q)) : posts;
+    // A busca entra no corpo do ensaio, nao so no titulo. O normalizado fica em
+    // cache por slug — senao seriam varios KB de normalize() a cada tecla.
+    if (!this.hay) this.hay = {};
+    const buscavel = (p) => this.hay[p.slug] || (this.hay[p.slug] = norm(p.title + " " + p.topic + " " + p.category + " " + p.body));
+    const pool = q ? posts.filter((p) => buscavel(p).includes(q)) : posts;
     base.results = pool.slice(0, 8).map((p, i) => ({ slug: p.slug, title: p.title, meta: p.category + " · " + p.topic, dim: i === s.sel ? 1 : 0.55 }));
     base.noResults = q.length > 0 && pool.length === 0;
     base.onSearchKey = (e) => {
@@ -377,8 +470,12 @@ class Component extends DCLogic {
     };
 
     const r = s.route;
+    if (r.view === "missing") return naoEncontrado();
     if (r.view === "post") {
-      const post = posts.find((p) => p.slug === r.slug) || posts[0];
+      // Antes caia em posts[0]: a URL dizia um ensaio e a tela mostrava outro.
+      const post = posts.find((p) => p.slug === r.slug);
+      if (!post) return naoEncontrado();
+      this.meta = { title: post.title + " — " + d.site.title, ogTitle: post.title, desc: resumoDe(post.body), url: raiz + "/post/" + post.slug, type: "article" };
       const blocks = this.parseBody(post.body);
       const rest = posts.filter((p) => p.slug !== post.slug);
       const sameTopic = rest.filter((p) => p.topic === post.topic);
@@ -399,18 +496,22 @@ class Component extends DCLogic {
       return { ...base, isPost: true, post, blocks, showRail, marks, resume, next: { label: sameTopic.length ? "Ainda sobre " + post.topic.toLowerCase() : "Continuar lendo", title: nx.title, slug: nx.slug, vt: nx.vt } };
     }
     if (r.view === "category") {
-      const cat = cats.find((x) => x.slug === r.slug) || cats[0];
+      const cat = cats.find((x) => x.slug === r.slug);
+      if (!cat) return naoEncontrado();
+      this.meta = { title: cat.name + " — " + d.site.title, ogTitle: cat.name, desc: "Ensaios sobre " + cat.name.toLowerCase() + ".", url: raiz + "/#/categoria/" + cat.slug, type: "website" };
       const groups = cat.topics.map((t) => ({ ...t, showLabel: true }));
       return { ...base, isList: true, list: { kicker: "Relação", name: cat.name, groups } };
     }
     if (r.view === "topic") {
       const all = [];
       cats.forEach((cat) => cat.topics.forEach((t) => all.push({ ...t, category: cat.name })));
-      const t = all.find((x) => x.slug === r.slug) || all[0];
+      const t = all.find((x) => x.slug === r.slug);
+      if (!t) return naoEncontrado();
+      this.meta = { title: t.name + " — " + d.site.title, ogTitle: t.name, desc: "Ensaios sobre " + t.name.toLowerCase() + ", em " + t.category.toLowerCase() + ".", url: raiz + "/#/topico/" + t.slug, type: "website" };
       return { ...base, isList: true, list: { kicker: t.category, name: t.name, groups: [{ ...t, showLabel: false }] } };
     }
     const f = posts[0];
-    return { ...base, isHome: true, categories: cats, featured: { ...f, excerpt: (f.body.split(/\n{2,}/)[0] || "").slice(0, 190).replace(/[\s.,;:]+$/, "") + "…" } };
+    return { ...base, isHome: true, categories: cats, featured: { ...f, excerpt: resumoDe(f.body) } };
   }
 }
 
